@@ -1,4 +1,4 @@
-FROM node:14.17.6-alpine3.11
+
 
 LABEL \
   org.opencontainers.image.title="pull" \
@@ -33,6 +33,7 @@ ENV \
   LOG_LEVEL=info \
   WEBHOOK_PATH=/webhook \
   PULL_INTERVAL=3600 \
+  JOB_TIMEOUT=60 \
   MAX_CONCURRENT=10 \
   MAX_IN_QUEUE=1000 \
   CONFIG_FILENAME=pull.yml \
@@ -44,10 +45,7 @@ ENV \
 WORKDIR /app
 COPY package*.json ./
 RUN \
-  apk add --no-cache --virtual .build-dependencies build-base gcc wget git && \
-  apk add --no-cache python && \
   npm ci --production && \
-  apk del .build-dependencies && \
   :
 
 COPY . .
